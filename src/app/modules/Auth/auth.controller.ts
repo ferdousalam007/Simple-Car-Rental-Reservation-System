@@ -1,30 +1,30 @@
 import httpStatus from 'http-status';
-import config from '../../config';
+// import config from '../../config';
 import catchAsync from '../../utils/catchAsync';
-import sendResponse from '../../utils/sendResponse';
 import { AuthServices } from './auth.service';
+import {sendResponse2} from '../../utils/sendResponse';
+
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
-  const { refreshToken, accessToken, needsPasswordChange } = result;
-
-  res.cookie('refreshToken', refreshToken, {
-    secure: config.NODE_ENV === 'production',
-    httpOnly: true,
-  });
-
-  sendResponse(res, {
+  const {token} = result;
+  const copyResult = {...result};
+  copyResult.user.password=undefined;
+  
+  
+  sendResponse2(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User is logged in succesfully!',
-    data: {
-      accessToken,
-      needsPasswordChange,
-    },
-  });
+    data: copyResult.user,
+    token // Use the actual token variable here
+  })
+  
 });
 
 
 export const AuthControllers = {
   loginUser
 };
+
+
