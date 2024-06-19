@@ -10,4 +10,13 @@ router.post('/',
     validateRequest(carValidations.createCarValidationSchema),
     carController.createCar
 );
+router.get('/',
+    carController.getAllCars
+);
+router.get('/:id',
+    carController.getACar
+);
+router.delete('/:id',
+    carController.deleteACarIntoDB
+);
 export const CarRoutes = router;

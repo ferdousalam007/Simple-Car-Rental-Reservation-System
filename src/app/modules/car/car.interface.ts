@@ -1,7 +1,7 @@
 import { USER_ROLE } from "./car.constant";
 
 //create type in typescript
-export type TCar= {
+export type TCar = {
     name: string;
     description: string;
     color: string;
