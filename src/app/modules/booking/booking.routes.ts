@@ -10,10 +10,10 @@ router.post('/',
     validateRequest(bookingValidation.createBookingSchema),
     bookingController.bookACar
 );
-// router.get('/my-bookings',
-//     auth('user'),
-//     bookingController.bookACar
-// );
+router.get('/my-bookings',
+    auth('user'),
+    bookingController.getBookingByUser
+);
 // router.post('/',
 //     auth('admin'),
 //     validateRequest(carValidations.createCarValidationSchema),

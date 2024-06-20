@@ -11,7 +11,6 @@ export type  TBooking ={
     user: Types.ObjectId;
     car: Types.ObjectId;
     totalCost: number;
-    // isBooked: 'unconfirmed' | 'confirmed';
 }
 export type TUserRole = keyof typeof USER_ROLE;
 

@@ -8,20 +8,11 @@ import mongoose from "mongoose";
 //Get all car booking
 const getAllBookingFromDB = async (query: Record<string, unknown>)=>{
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // const filtering:any={};
- 
     if(query.carId){
         query.car =query.carId;
         delete query.carId
 
     }
-    console.log({query})
-    // if(query.car){
-    //     query.car =query.car;
-    // }
-    // filtering.startTime =query.startTime
-    // filtering.user =query
-    // console.log(filtering)
     const offeredCourseQuery = new QueryBuilder(Booking.find()
         .populate("car")
         .populate({ path: "user", select: { name: 1, email: 1, address: 1, role: 1, phone: 1 } }),
@@ -78,9 +69,16 @@ const bookACarIntoDB=async (data:Record<string,unknown>)=>{
     }
     
 }
-
+//get booking data by user
+const getBookingByUserFromDB=async (userId:string)=>{
+    const result=await Booking.find({user:userId})
+        .populate("car")
+        .populate({ path: "user", select: { name: 1, email: 1, address: 1, role: 1, phone: 1 } })
+    return result;
+}
 export const bookingsService={
     getAllBookingFromDB,
-    bookACarIntoDB
+    bookACarIntoDB,
+    getBookingByUserFromDB,
 } 
 

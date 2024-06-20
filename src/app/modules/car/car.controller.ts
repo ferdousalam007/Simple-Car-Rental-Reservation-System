@@ -33,45 +33,28 @@ const getAllCars = catchAsync(async (req, res) => {
         data: result,
     });
 });
-const getACar=catchAsync(async(req,res)=>{
-    const id=req.params.id;
-    const result=await CarServices.getACarFromDB(id);
-    if(!result){
-        return sendResponse(res,{
-            statusCode:httpStatus.NOT_FOUND,
-            success:false,
-            message:'No Data Found',
-            data:[]
+const getACar = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const result = await CarServices.getACarFromDB(id);
+    if (!result) {
+        return sendResponse(res, {
+            statusCode: httpStatus.NOT_FOUND,
+            success: false,
+            message: 'No Data Found',
+            data: []
         })
     }
-    sendResponse(res,{
-        statusCode:httpStatus.OK,
-        success:true,
-        message:'Car retrieved successfully',
-        data:result
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Car retrieved successfully',
+        data: result
     })
 });
-const updateCar=catchAsync(async(req,res)=>{
-    const id=req.params.id;
-    const body=req.body;
-    const result=await CarServices.updateACarIntoDB(id,body);
-    if (!result) {
-        throw new AppError(
-            httpStatus.NOT_FOUND,
-            `Car not found`,
-        );
-    }
-    
-    sendResponse(res,{
-        statusCode:httpStatus.OK,
-        success:true,
-        message:'Car updated successfully',
-        data:result
-    })
-});
-const deleteACarIntoDB=catchAsync(async(req, res)=>{
-    const id=req.params.id;
-    const result=await CarServices.deleteACarIntoDB(id);
+const updateCar = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const body = req.body;
+    const result = await CarServices.updateACarIntoDB(id, body);
     if (!result) {
         throw new AppError(
             httpStatus.NOT_FOUND,
@@ -79,19 +62,53 @@ const deleteACarIntoDB=catchAsync(async(req, res)=>{
         );
     }
 
-    sendResponse(res,{
-        statusCode:httpStatus.OK,
-        success:true,
-        message:'Car deleted successfully',
-        data:result
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Car updated successfully',
+        data: result
+    })
+});
+const deleteACarIntoDB = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const result = await CarServices.deleteACarIntoDB(id);
+    if (!result) {
+        throw new AppError(
+            httpStatus.NOT_FOUND,
+            `Car not found`,
+        );
+    }
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Car deleted successfully',
+        data: result
     })
 })
-
+//Return The Car (Only Accessible To Admin)
+const returnCar = catchAsync(async (req, res) => {
+   
+    const result = await CarServices.returnTheCarIntoDB(req);
+    if (!result) {
+         throw new AppError(
+             httpStatus.NOT_FOUND,
+            `Car not found`,
+        );
+    }
+    sendResponse(res, {
+       statusCode: httpStatus.OK,
+       success: true,
+       message: 'Car returned successfully',
+         data: result
+    })
+})
 
 export const carController = {
     createCar,
     getAllCars,
     getACar,
     updateCar,
-    deleteACarIntoDB
+    deleteACarIntoDB,
+    returnCar
 }

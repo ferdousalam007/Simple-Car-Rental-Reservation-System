@@ -38,9 +38,28 @@ const bookACar= catchAsync(async(req,res)=>{
 })
 
 //get all booking get user
+const getBookingByUser=catchAsync(async(req, res)=>{
+    const userId = req.user?.userId;
+    const result = await bookingsService.getBookingByUserFromDB(userId);
+    if (!result.length) {
+        return sendResponse(res, {
+            statusCode: httpStatus.NOT_FOUND,
+            success: false,
+            message: 'No Data Found',
+            data: []
+        });
+    }
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        message:"All Booking fetched successfully",
+        data:result
+    })
+})
 
 
 export const bookingController = {
     getAllBooking,
     bookACar,
+    getBookingByUser
 }
