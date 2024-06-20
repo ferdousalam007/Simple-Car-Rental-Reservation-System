@@ -20,8 +20,8 @@ const sendResponse2 = <T>(res: Response, data: TResponse<T>) => {
     success: data.success,
     message: data.message,
     data: data.data,
-    token:data.token
-   // Include the token in the response
+    token: data.token,
+    // Include the token in the response
   });
 };
 // export default sendResponse2;

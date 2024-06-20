@@ -5,23 +5,19 @@ import { bookingController } from './booking.controller';
 import { bookingValidation } from './booking.validation';
 const router = express.Router();
 
-router.post('/',
-    auth('user'),
-    validateRequest(bookingValidation.createBookingSchema),
-    bookingController.bookACar
+router.post(
+  '/',
+  auth('user'),
+  validateRequest(bookingValidation.createBookingSchema),
+  bookingController.bookACar,
 );
-router.get('/my-bookings',
-    auth('user'),
-    bookingController.getBookingByUser
-);
+router.get('/my-bookings', auth('user'), bookingController.getBookingByUser);
 // router.post('/',
 //     auth('admin'),
 //     validateRequest(carValidations.createCarValidationSchema),
 //     carController.createCar
 // );
-router.get('/',
-   bookingController.getAllBooking
-);
+router.get('/', auth('admin'), bookingController.getAllBooking);
 // router.get('/:id',
 //     carController.getACar
 // );

@@ -19,8 +19,6 @@ app.use(cors());
 // application routes
 app.use('/api', router);
 
-
-
 app.use(globalErrorHandler);
 
 //Not Found

@@ -4,8 +4,9 @@ import { userValidations } from './user.validation';
 import { userController } from './user.controller';
 const router = express.Router();
 
-router.post('/signup',
- validateRequest(userValidations.createUserValidationSchema),
- userController.createUser
+router.post(
+  '/signup',
+  validateRequest(userValidations.createUserValidationSchema),
+  userController.createUser,
 );
 export const UserRoutes = router;

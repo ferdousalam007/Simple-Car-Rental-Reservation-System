@@ -4,7 +4,6 @@ import { AuthRoutes } from '../modules/Auth/auth.route';
 import { CarRoutes } from '../modules/car/car.routes';
 import { BookingRoutes } from '../modules/booking/booking.routes';
 
-
 const router = Router();
 
 const moduleRoutes = [
@@ -23,7 +22,7 @@ const moduleRoutes = [
   {
     path: '/bookings',
     route: BookingRoutes,
-  }
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
