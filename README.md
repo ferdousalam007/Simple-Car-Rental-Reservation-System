@@ -4,7 +4,7 @@ Welcome to the Simple Car Rental Reservation System, a streamlined platform desi
 
 ## Live URL
 
-- **[Visit the live application](https://your-app-url.com)** (Note: Replace this placeholder with the actual URL when the application is deployed)
+- **[Visit the live application](https://simple-car-rental-reservation-system.vercel.app/)** (Note: Replace this placeholder with the actual URL when the application is deployed)
 
 ## Features
 
