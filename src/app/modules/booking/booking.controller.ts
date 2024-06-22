@@ -26,12 +26,12 @@ const getAllBooking = catchAsync(async (req, res) => {
 const bookACar = catchAsync(async (req, res) => {
   const userId = req.user?.userId;
   const newBody = { ...req.body, userId };
-  const result = await bookingsService.bookACarIntoDB(newBody);
+  const result = await bookingsService.bookACarIntoDB(newBody, res);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
-    message: 'Booking created successfully',
+    message: 'Car booked successfully',
     data: result,
   });
 });
@@ -51,7 +51,7 @@ const getBookingByUser = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'All Booking fetched successfully',
+    message: 'My Bookings retrieved successfully',
     data: result,
   });
 });

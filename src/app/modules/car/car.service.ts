@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
@@ -5,7 +7,9 @@ import { Booking } from '../booking/booking.model';
 import { TCar } from './car.interface';
 import { Car } from './car.model';
 import mongoose from 'mongoose';
+import { sendResponse } from '../../utils/sendResponse';
 
+//create a car into database by admin
 const createCarIntoDB = async (payload: TCar) => {
   const result = await Car.create(payload);
   if (!result) {
@@ -16,42 +20,78 @@ const createCarIntoDB = async (payload: TCar) => {
   }
   return result;
 };
+
+//get single car from database
 const getCarFromDB = async () => {
   const result = await Car.find({ isDeleted: false });
   return result;
 };
-//Get A Car
+//Get A Car from database by all
 const getACarFromDB = async (id: string) => {
   const result = await Car.findById(id);
   return result;
 };
-//Update A Car
-const updateACarIntoDB = async (id: string, payload: TCar) => {
-  const result = await Car.findByIdAndUpdate(id, payload);
+//Update A Car from database by admin
+const updateACarIntoDB = async (id: string, payload: TCar, res: any) => {
+  const carId = await Car.findById(id);
+  if (!carId) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'Car not found',
+      data: [],
+    });
+  }
+  const result = await Car.findByIdAndUpdate(id, payload, { new: true });
+  if (!result) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'Car not found',
+      data: [],
+    });
+  }
   return result;
 };
-//Delete A Car
-const deleteACarIntoDB = async (id: string) => {
+//Delete A Car from database by admin
+const deleteACarIntoDB = async (id: string, res: any) => {
+  const findDeletedCar = await Car.findById(id);
+  if (findDeletedCar?.isDeleted) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'Car not found',
+      data: [],
+    });
+  }
   const result = await Car.findByIdAndUpdate(
     id,
     { isDeleted: true },
     { new: true },
   );
-
   return result;
 };
 //Return The Car only accesalble by admin
-const returnTheCarIntoDB = async (req: any) => {
+const returnTheCarIntoDB = async (req: any, res: any) => {
   const bookingId = req.body.bookingId;
   const endTime = req.body.endTime;
   const checkIsBooked = await Booking.findById(bookingId);
   if (!checkIsBooked) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Booking not found');
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'Booking not found',
+      data: [],
+    });
   }
-  if (checkIsBooked.endTime) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'this booking already end time');
+  if (checkIsBooked?.endTime) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'this booking already return your car',
+    );
   }
   const findCar = await Car.findById(checkIsBooked?.car);
+
   if (!findCar) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found');
   }
@@ -76,7 +116,7 @@ const returnTheCarIntoDB = async (req: any) => {
       session.startTransaction();
 
       const carUpdate = await Car.findByIdAndUpdate(
-        checkIsBooked.car._id,
+        checkIsBooked?.car._id,
         { status: 'available' },
         { new: true, session },
       );

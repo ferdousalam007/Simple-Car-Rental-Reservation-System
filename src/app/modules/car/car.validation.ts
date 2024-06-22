@@ -1,4 +1,6 @@
 import { z } from 'zod';
+
+//car validation schema
 export const createCarValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required' }),
@@ -12,6 +14,7 @@ export const createCarValidationSchema = z.object({
     }),
   }),
 });
+//car update validation schema
 export const updatedCarValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required' }).optional(),

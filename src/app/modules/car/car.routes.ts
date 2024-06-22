@@ -6,25 +6,35 @@ import auth from '../../middlewares/auth';
 import { bookingValidation } from '../booking/booking.validation';
 const router = express.Router();
 
+//create car by admin route
 router.post(
   '/',
   auth('admin'),
   validateRequest(carValidations.createCarValidationSchema),
   carController.createCar,
 );
+//get all car by all
 router.get('/', carController.getAllCars);
-router.get('/:id', carController.getACar);
+
+//return car by admin
+router.put(
+  '/return',
+  auth('admin'),
+  validateRequest(bookingValidation.returnCarSchema),
+  carController.returnCar,
+);
+//update car by admin
 router.put(
   '/:id',
   auth('admin'),
   validateRequest(carValidations.updatedCarValidationSchema),
   carController.updateCar,
 );
-router.delete('/:id', auth('admin'), carController.deleteACarIntoDB);
-router.put(
-  '/return',
-  validateRequest(bookingValidation.returnCarSchema),
-  carController.returnCar,
-);
+//get single car by all
+router.get('/:id', carController.getACar);
 
+//delete car by admin
+router.delete('/:id', auth('admin'), carController.deleteACarIntoDB);
+
+//export car routes
 export const CarRoutes = router;

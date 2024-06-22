@@ -12,12 +12,12 @@ router.post(
   bookingController.bookACar,
 );
 router.get('/my-bookings', auth('user'), bookingController.getBookingByUser);
+router.get('/', auth('admin'), bookingController.getAllBooking);
 // router.post('/',
 //     auth('admin'),
 //     validateRequest(carValidations.createCarValidationSchema),
 //     carController.createCar
 // );
-router.get('/', auth('admin'), bookingController.getAllBooking);
 // router.get('/:id',
 //     carController.getACar
 // );

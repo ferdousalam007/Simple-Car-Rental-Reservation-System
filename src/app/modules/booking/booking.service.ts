@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { Car } from '../car/car.model';
 import { Booking } from './booking.model';
 import mongoose from 'mongoose';
+import { sendResponse } from '../../utils/sendResponse';
 
-//Get all car booking
+//Get all car booking by admin
 const getAllBookingFromDB = async (query: Record<string, unknown>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (query.carId) {
@@ -30,18 +32,26 @@ const getAllBookingFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const bookACarIntoDB = async (data: Record<string, unknown>) => {
+//book cara by user
+const bookACarIntoDB = async (data: Record<string, unknown>, res: any) => {
   const isCarBooked = await Car.findById(data.carId);
   const checkStatus = isCarBooked?.status;
   const isDeleted = isCarBooked?.isDeleted;
   if (isDeleted) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      'This Car Already is deleted please try another car',
-    );
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: true,
+      message: 'Car not found',
+      data: [],
+    });
   }
   if (!isCarBooked) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Car not found !');
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: true,
+      message: 'Car not found',
+      data: [],
+    });
   }
   if (checkStatus === 'unavailable') {
     throw new AppError(
